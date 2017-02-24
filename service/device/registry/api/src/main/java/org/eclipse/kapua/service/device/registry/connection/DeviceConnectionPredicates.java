@@ -12,13 +12,15 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.device.registry.connection;
 
+import org.eclipse.kapua.model.KapuaUpdatableEntityPredicates;
+
 /**
  * Device connection query predicates.
  * 
  * @since 1.0
  *
  */
-public class DeviceConnectionPredicates
+public interface DeviceConnectionPredicates extends KapuaUpdatableEntityPredicates
 {
     /**
      * Client identifier
