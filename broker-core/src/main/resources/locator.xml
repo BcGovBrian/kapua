@@ -49,12 +49,6 @@
 		<api>org.eclipse.kapua.model.config.metatype.KapuaMetatypeFactory</api>
         <api>org.eclipse.kapua.service.datastore.DatastoreObjectFactory</api>
 		
-		<!-- 
-		<api>org.eclipse.kapua.service.datastore.DatastoreObjectFactory</api>
-		<api>org.eclipse.kapua.service.datastore.TopicInfoStoreService</api>
-		<api>org.eclipse.kapua.service.datastore.MetricInfoStoreService</api>
-		 -->
-		 
 		<api>org.eclipse.kapua.service.device.call.DeviceCallFactory</api>
 		<api>org.eclipse.kapua.service.device.call.DeviceMessageFactory</api>
 

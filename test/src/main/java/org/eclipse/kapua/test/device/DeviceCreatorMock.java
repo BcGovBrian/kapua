@@ -337,4 +337,18 @@ public class DeviceCreatorMock implements DeviceCreator {
 
     }
 
+    @Override
+    public KapuaId getLastEventId()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setLastEventId(KapuaId lastEventId)
+    {
+        // TODO Auto-generated method stub
+
+    }
+
 }

@@ -13,8 +13,6 @@
 package org.eclipse.kapua.broker.core.message;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.jms.BytesMessage;
 import javax.jms.JMSException;
@@ -140,7 +138,6 @@ public class JmsUtil
      * @return
      * @throws KapuaException
      */
-    @SuppressWarnings({ "rawtypes", "unchecked" })
     public static CamelKapuaMessage<?> convertToCamelKapuaMessage(ConnectorDescriptor connectorDescriptor, MessageType messageType, byte[] messageBody, String jmsTopic, Date queuedOn, KapuaId connectionId, String clientId)
         throws KapuaException
     {
@@ -164,21 +161,12 @@ public class JmsUtil
     private static KapuaMessage<?,?> convertToKapuaMessage(Class<DeviceMessage<?, ?>> deviceMessageType, Class<KapuaMessage<?, ?>> kapuaMessageType, byte[] messageBody, String jmsTopic, Date queuedOn, KapuaId connectionId, String clientId)
         throws KapuaException
     {
-        Translator<JmsMessage, DeviceMessage<?, ?>> translatorFromJms = null;// = translatorFromJmsMap.get(connectorDescriptor.getDeviceProtocolName());
-        if (translatorFromJms == null) {
-            // lookup
-            translatorFromJms = Translator.getTranslatorFor(JmsMessage.class, deviceMessageType);// birth ...
-            // translatorFromJmsMap.put(protocol, translatorFromJms);
-        }
+        // first step... from jms to device dependent protocol level (unknown)
+        Translator<JmsMessage, DeviceMessage<?, ?>> translatorFromJms = Translator.getTranslatorFor(JmsMessage.class, deviceMessageType);// birth ...
         DeviceMessage<?,?> deviceMessage = translatorFromJms.translate(new JmsMessage(new JmsTopic(jmsTopic), queuedOn, new JmsPayload(messageBody)));
 
         // second step.... from device dependent protocol (unknown) to Kapua
-        Translator<DeviceMessage<?, ?>, KapuaMessage<?, ?>> translatorToKapua = null;// = translatorToKapuaMap.get(connectorDescriptor.getDeviceProtocolName());
-        if (translatorToKapua == null) {
-            // lookup
-            translatorToKapua = Translator.getTranslatorFor(deviceMessageType, kapuaMessageType);
-            // translatorToKapuaMap.put(protocol, translatorToKapua);
-        }
+        Translator<DeviceMessage<?, ?>, KapuaMessage<?, ?>> translatorToKapua = Translator.getTranslatorFor(deviceMessageType, kapuaMessageType);
         KapuaMessage message = translatorToKapua.translate(deviceMessage);
         message.setClientId(clientId);
         return message;
@@ -196,22 +184,12 @@ public class JmsUtil
      */
     public static JmsMessage convertToJmsMessage(ConnectorDescriptor connectorDescriptor, MessageType messageType, KapuaMessage<?,?> kapuaMessage) throws KapuaException, ClassNotFoundException
     {
-        // first step... from Kapua to device level
-        Translator<KapuaMessage<?, ?>, DeviceMessage<?, ?>> translatorFromKapua = null; // translatorFromKapuaMap.get(protocol);
-        if (translatorFromKapua == null) {
-            // lookup
-            translatorFromKapua = Translator.getTranslatorFor(connectorDescriptor.getKapuaClass(messageType), connectorDescriptor.getDeviceClass(messageType));
-            // translatorFromKapuaMap.put(protocol, translatorFromKapua);
-        }
+        // first step... from Kapua to device level dependent protocol (unknown)
+        Translator<KapuaMessage<?, ?>, DeviceMessage<?, ?>> translatorFromKapua = Translator.getTranslatorFor(connectorDescriptor.getKapuaClass(messageType), connectorDescriptor.getDeviceClass(messageType));
         DeviceMessage<?,?> deviceMessage = translatorFromKapua.translate(kapuaMessage);
 
-        // second step.... from device level to jms
-        Translator<DeviceMessage<?, ?>, JmsMessage> translatorToJms = null; // translatorToJmsMap.get(protocol);
-        if (translatorToJms == null) {
-            // lookup
-            translatorToJms = Translator.getTranslatorFor(connectorDescriptor.getDeviceClass(messageType), JmsMessage.class);
-            // translatorToJmsMap.put(protocol, translatorToJms);
-        }
+        // second step.... from device level dependent protocol (unknown) to jms
+        Translator<DeviceMessage<?, ?>, JmsMessage> translatorToJms = Translator.getTranslatorFor(connectorDescriptor.getDeviceClass(messageType), JmsMessage.class);
         return translatorToJms.translate(deviceMessage);
     }
 

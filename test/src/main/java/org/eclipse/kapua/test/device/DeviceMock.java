@@ -20,8 +20,9 @@ import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceCredentialsMode;
-import org.eclipse.kapua.service.device.registry.DeviceEventType;
 import org.eclipse.kapua.service.device.registry.DeviceStatus;
+import org.eclipse.kapua.service.device.registry.connection.DeviceConnection;
+import org.eclipse.kapua.service.device.registry.event.DeviceEvent;
 
 public class DeviceMock implements Device {
 
@@ -142,30 +143,6 @@ public class DeviceMock implements Device {
 
 	@Override
 	public void setDisplayName(String diplayName) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public Date getLastEventOn() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setLastEventOn(Date lastEventOn) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public DeviceEventType getLastEventType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setLastEventType(DeviceEventType lastEventType) {
 		// TODO Auto-generated method stub
 
 	}
@@ -432,6 +409,34 @@ public class DeviceMock implements Device {
     {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public <C extends DeviceConnection> C getConnection()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public KapuaId getLastEventId()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setLastEventId(KapuaId lastEventId)
+    {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public <E extends DeviceEvent> E getLastEvent()
+    {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }
