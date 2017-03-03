@@ -3,5 +3,25 @@ jdk:
   - oraclejdk8
 
 sudo: required
+
 services:
   - docker
+
+after_success:
+  - cd $TRAVIS_BUILD_DIR/assembly
+  - pwd
+  - mvn -Pdocker
+  - docker images
+
+after_script:
+  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+  - docker tag kapua/kapua-sql docker.io/bcgovbrian/kapua-sql:latest
+  - docker tag kapua/kapua-liquibase docker.io/bcgovbrian/kapua-liquibase:latest
+  - docker tag kapua/kapua-broker docker.io/bcgovbrian/kapua-broker:latest
+  - docker tag kapua/kapua-console docker.io/bcgovbrian/kapua-console:latest
+  - docker tag kapua/kapua-api docker.io/bcgovbrian/kapua-api:latest
+  - docker push docker.io/bcgovbrian/kapua-sql:latest
+  - docker push docker.io/bcgovbrian/kapua-liquibase:latest
+  - docker push docker.io/bcgovbrian/kapua-broker:latest
+  - docker push docker.io/bcgovbrian/kapua-console:latest
+  - docker push docker.io/bcgovbrian/kapua-api:latest
