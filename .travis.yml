@@ -9,8 +9,7 @@ services:
 
 after_success:
   - cd $TRAVIS_BUILD_DIR/assembly
-  - pwd
-  - mvn -Pdocker
+  - mvn -Pdocker -q
   - docker images
 
 after_script:
